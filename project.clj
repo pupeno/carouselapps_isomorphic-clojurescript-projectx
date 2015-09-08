@@ -40,12 +40,15 @@
 
   :minify-assets {:assets {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
 
-  :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc"]
-                             :compiler     {:output-to     "resources/public/js/app.js"
-                                            :output-dir    "resources/public/js/out"
-                                            :asset-path    "js/out"
-                                            :optimizations :none
-                                            :pretty-print  true}}}}
+  :cljsbuild {:builds {:app         {:source-paths ["src/cljs" "src/cljc"]
+                                     :compiler     {:output-to  "resources/public/js/app.js"
+                                                    :output-dir "resources/public/js/app"
+                                                    :asset-path "js/app"}}
+                       :server-side {:source-paths ["src/cljs" "src/cljc"]
+                                     :compiler     {:output-to     "resources/public/js/server-side.js"
+                                                    :output-dir    "resources/public/js/server-side"
+                                                    :asset-path    "js/server-side"
+                                                    :optimizations :whitespace}}}}
 
   :profiles {:dev     {:repl-options {:init-ns projectx.repl}
 
@@ -70,15 +73,22 @@
 
                        :env          {:dev true}
 
-                       :cljsbuild    {:builds {:app {:source-paths ["env/dev/cljs"]
-                                                     :compiler     {:main       "projectx.dev"
-                                                                    :source-map true}}}}}
+                       :cljsbuild    {:builds {:app         {:source-paths ["env/dev/cljs"]
+                                                             :compiler     {:optimizations :none
+                                                                            :source-map    true
+                                                                            :pretty-print  true
+                                                                            :main          "projectx.dev"}}
+                                               :server-side {:compiler {:optimizations :whitespace
+                                                                        :source-map    "resources/public/js/server-side.js.map"
+                                                                        :pretty-print  true}}}}}
 
              :uberjar {:hooks       [leiningen.cljsbuild minify-assets.plugin/hooks]
                        :env         {:production true}
                        :aot         :all
                        :omit-source true
                        :cljsbuild   {:jar    true
-                                     :builds {:app {:source-paths ["env/prod/cljs"]
-                                                    :compiler     {:optimizations :advanced
-                                                                   :pretty-print  false}}}}}})
+                                     :builds {:app         {:source-paths ["env/prod/cljs"]
+                                                            :compiler     {:optimizations :advanced
+                                                                           :pretty-print  false}}
+                                              :server-side {:compiler     {:optimizations :advanced
+                                                                           :pretty-print  false}}}}}})

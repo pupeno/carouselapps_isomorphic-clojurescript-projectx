@@ -1,28 +1,36 @@
 (ns projectx.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [clojure.java.io :as io]
+            [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [hiccup.core :refer [html]]
             [hiccup.page :refer [include-js include-css]]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.middleware.reload :refer [wrap-reload]]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]])
+  (:import [javax.script ScriptEngineManager
+                         Invocable]))
 
 (defn render-app [path]
-  (html
-    [:html
-     [:head
-      [:meta {:charset "utf-8"}]
-      [:meta {:name    "viewport"
-              :content "width=device-width, initial-scale=1"}]
-      (include-css (if (env :dev) "css/site.css" "css/site.min.css"))]
-     [:body
-      [:div#app
-       [:h3 "ClojureScript has not been compiled!"]
-       [:p "please run "
-        [:b "lein figwheel"]
-        " in order to start the compiler"]]
-      (include-js "js/app.js")]]))
+  (let [js-engine (doto (.getEngineByName (ScriptEngineManager.) "nashorn")
+                    (.eval "var global = this")             ; React requires either "window" or "global" to be defined.
+                    (.eval (-> "public/js/server-side.js"   ; TODO: load the console polyfill, so that calling console.log is safe.
+                               io/resource
+                               io/reader)))]
+    (html
+      [:html
+       [:head
+        [:meta {:charset "utf-8"}]
+        [:meta {:name    "viewport"
+                :content "width=device-width, initial-scale=1"}]
+        (include-css (if (env :dev) "css/site.css" "css/site.min.css"))]
+       [:body
+        [:div#app
+         [:h3 "ClojureScript has not been compiled!"]
+         [:p "please run "
+          [:b "lein figwheel"]
+          " in order to start the compiler"]]
+        (include-js "js/app.js")]])))
 
 (defn- path [request]
   (str (:uri request)                                       ; Build the path the same way ring.util.request/request-url does it: https://github.com/ring-clojure/ring/blob/1.4.0/ring-core/src/ring/util/request.clj#L5
