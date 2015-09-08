@@ -16,7 +16,13 @@
                     (.eval "var global = this")             ; React requires either "window" or "global" to be defined.
                     (.eval (-> "public/js/server-side.js"   ; TODO: load the console polyfill, so that calling console.log is safe.
                                io/resource
-                               io/reader)))]
+                               io/reader)))
+        render-page (fn [path]
+                      (.invokeMethod
+                        ^Invocable js-engine
+                        (.eval js-engine "projectx.core")
+                        "render_page"
+                        (object-array [path])))]
     (html
       [:html
        [:head
@@ -25,11 +31,7 @@
                 :content "width=device-width, initial-scale=1"}]
         (include-css (if (env :dev) "css/site.css" "css/site.min.css"))]
        [:body
-        [:div#app
-         [:h3 "ClojureScript has not been compiled!"]
-         [:p "please run "
-          [:b "lein figwheel"]
-          " in order to start the compiler"]]
+        [:div#app [:div (render-page path)]]
         (include-js "js/app.js")]])))
 
 (defn- path [request]

@@ -35,6 +35,9 @@
 (defn set-current-page [parsed-path]
   (session/put! :current-page parsed-path))
 
+(defn ^:export render-page [path]
+  (reagent/render-to-string [(parse-path path)]))
+
 ;; -------------------------
 ;; Initialize app
 (defn mount-root []
