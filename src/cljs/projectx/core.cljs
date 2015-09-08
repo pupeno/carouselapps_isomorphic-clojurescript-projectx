@@ -1,45 +1,39 @@
 (ns projectx.core
     (:require [reagent.core :as reagent :refer [atom]]
               [reagent.session :as session]
-              [secretary.core :as secretary :include-macros true]
-              [goog.events :as events]
-              [goog.history.EventType :as EventType])
+              [bidi.bidi :as bidi]
+              [pushy.core :as pushy])
     (:import goog.History))
 
 ;; -------------------------
-;; Views
+;; Routes
+(def routes ["/" {""      :home-page
+                  "about" :about-page}])
 
+;; -------------------------
+;; Views
 (defn home-page []
   [:div [:h2 "Welcome to projectx"]
-   [:div [:a {:href "#/about"} "go to about page"]]])
+   [:div [:a {:href (bidi/path-for routes :about-page)} "go to about page"]]])
 
 (defn about-page []
   [:div [:h2 "About projectx"]
-   [:div [:a {:href "#/"} "go to the home page"]]])
+   [:div [:a {:href (bidi/path-for routes :home-page)} "go to the home page"]]])
 
 (defn current-page []
   [:div [(session/get :current-page)]])
 
-;; -------------------------
-;; Routes
-(secretary/set-config! :prefix "#")
-
-(secretary/defroute "/" []
-  (session/put! :current-page #'home-page))
-
-(secretary/defroute "/about" []
-  (session/put! :current-page #'about-page))
 
 ;; -------------------------
-;; History
-;; must be called after routes have been defined
-(defn hook-browser-navigation! []
-  (doto (History.)
-    (events/listen
-     EventType/NAVIGATE
-     (fn [event]
-       (secretary/dispatch! (.-token event))))
-    (.setEnabled true)))
+;; Routing and wiring
+(defn parse-path [path]
+  (case (:handler (bidi/match-route routes path))
+    :home-page #'home-page
+    :about-page #'about-page
+    (throw (js/Error. (str "Path not recognized: " (pr-str path))))))
+
+(defn set-current-page [parsed-path]
+  (session/put! :current-page parsed-path))
 
 ;; -------------------------
 ;; Initialize app
@@ -47,5 +41,5 @@
   (reagent/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []
-  (hook-browser-navigation!)
+  (pushy/start! (pushy/pushy set-current-page parse-path))
   (mount-root))

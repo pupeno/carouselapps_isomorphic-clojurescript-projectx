@@ -17,7 +17,8 @@
                  [hiccup "1.0.5"]
                  [environ "1.0.0"]
                  [org.clojure/clojurescript "1.7.122" :scope "provided"]
-                 [secretary "1.2.3"]]
+                 [bidi "1.20.3"]
+                 [kibu/pushy "0.3.2"]]
 
   :plugins [[lein-environ "1.0.0"]
             [lein-asset-minifier "0.2.2"]]
