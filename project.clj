@@ -18,7 +18,8 @@
                  [environ "1.0.0"]
                  [org.clojure/clojurescript "1.7.122" :scope "provided"]
                  [bidi "1.20.3"]
-                 [kibu/pushy "0.3.2"]]
+                 [kibu/pushy "0.3.2"]
+                 [aleph "0.4.0"]]
 
   :plugins [[lein-environ "1.0.0"]
             [lein-asset-minifier "0.2.2"]]
