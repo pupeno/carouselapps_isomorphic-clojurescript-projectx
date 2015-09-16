@@ -7,18 +7,18 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [ring-server "0.4.0"]
                  [cljsjs/react "0.13.3-1"]
-                 [reagent "0.5.1-rc3"]
-                 [reagent-forms "0.5.8"]
+                 [reagent "0.5.1"]
+                 [reagent-forms "0.5.9"]
                  [reagent-utils "0.1.5"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
                  [prone "0.8.2"]
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
-                 [environ "1.0.0"]
+                 [environ "1.0.1"]
                  [org.clojure/clojurescript "1.7.122" :scope "provided"]
-                 [bidi "1.20.3"]
-                 [kibu/pushy "0.3.2"]
+                 [bidi "1.21.0"]
+                 [kibu/pushy "0.3.3"]
                  [aleph "0.4.0"]]
 
   :plugins [[lein-environ "1.0.0"]
@@ -53,10 +53,10 @@
 
   :profiles {:dev     {:repl-options {:init-ns projectx.repl}
 
-                       :dependencies [[ring/ring-mock "0.2.0"]
+                       :dependencies [[ring/ring-mock "0.3.0"]
                                       [ring/ring-devel "1.4.0"]
                                       [lein-figwheel "0.3.9"]
-                                      [org.clojure/tools.nrepl "0.2.10"]
+                                      [org.clojure/tools.nrepl "0.2.11"]
                                       [pjstadig/humane-test-output "0.7.0"]]
 
                        :source-paths ["env/dev/clj"]
