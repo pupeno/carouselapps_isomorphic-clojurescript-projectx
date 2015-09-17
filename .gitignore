@@ -13,3 +13,4 @@ pom.xml.asc
 *.log
 .idea
 projectx.iml
+node_modules
