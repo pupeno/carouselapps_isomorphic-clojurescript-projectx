@@ -43,8 +43,7 @@
 
   :cljsbuild {:builds {:app         {:source-paths ["src/cljs" "src/cljc"]
                                      :compiler     {:output-to  "resources/public/js/app.js"
-                                                    :output-dir "resources/public/js/app"
-                                                    :asset-path "js/app"}}
+                                                    :output-dir "resources/public/js/app"}}
                        :server-side {:source-paths ["src/cljs" "src/cljc"]
                                      :compiler     {:output-to     "resources/public/js/server-side.js"
                                                     :output-dir    "resources/public/js/server-side"
@@ -78,10 +77,12 @@
                                                              :compiler     {:optimizations :none
                                                                             :source-map    true
                                                                             :pretty-print  true
-                                                                            :main          "projectx.dev"}}
+                                                                            :main          "projectx.dev"
+                                                                            :verbose       true}}
                                                :server-side {:compiler {:optimizations :whitespace
                                                                         :source-map    "resources/public/js/server-side.js.map"
-                                                                        :pretty-print  true}}}}}
+                                                                        :pretty-print  true
+                                                                        :verbose       true}}}}}
 
              :uberjar {:hooks       [leiningen.cljsbuild minify-assets.plugin/hooks]
                        :env         {:production true}
@@ -91,5 +92,5 @@
                                      :builds {:app         {:source-paths ["env/prod/cljs"]
                                                             :compiler     {:optimizations :advanced
                                                                            :pretty-print  false}}
-                                              :server-side {:compiler     {:optimizations :advanced
-                                                                           :pretty-print  false}}}}}})
+                                              :server-side {:compiler {:optimizations :advanced
+                                                                       :pretty-print  false}}}}}})
