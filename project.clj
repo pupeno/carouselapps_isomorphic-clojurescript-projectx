@@ -16,7 +16,7 @@
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
                  [environ "1.0.1"]
-                 [org.clojure/clojurescript "1.7.122" :scope "provided"]
+                 [org.clojure/clojurescript "1.7.48"]
                  [bidi "1.21.0"]
                  [kibu/pushy "0.3.3"]
                  [aleph "0.4.0"]]
