@@ -43,11 +43,11 @@
 
   :cljsbuild {:builds {:app         {:source-paths ["src/cljs" "src/cljc"]
                                      :compiler     {:output-to  "resources/public/js/app.js"
-                                                    :output-dir "resources/public/js/app"}}
+                                                    :output-dir "resources/public/js/app"
+                                                    :asset-path "js/app"}}
                        :server-side {:source-paths ["src/cljs" "src/cljc"]
                                      :compiler     {:output-to     "resources/public/js/server-side.js"
                                                     :output-dir    "resources/public/js/server-side"
-                                                    :asset-path    "js/server-side"
                                                     :optimizations :whitespace}}}}
 
   :profiles {:dev     {:repl-options {:init-ns projectx.repl}
